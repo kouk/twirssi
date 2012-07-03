@@ -527,6 +527,8 @@ sub cmd_info {
             $url = "http://twitter.com/$nick/statuses/$statusid";
         } elsif ( $username =~ /\@Identica/ ) {
             $url = "http://identi.ca/notice/$statusid";
+        } elsif ( $username =~ /\@([\w.]*)/ ) {
+            $url = "http://$1/notice/$statusid"; 
         }
     }
 
@@ -915,7 +917,10 @@ sub cmd_login {
         }
     } else {
         $twit = Net::Twitter->new(
-            $defservice eq 'Identica' ? ( identica => 1 ) : (),
+            $defservice eq 'Identica' ? ( identica => 1 ) : (
+                apiurl => "http://$defservice/api",
+                apirealm => "Laconica API",
+                ),
             username => $user,
             password => $pass,
             source   => "twirssi",	# XXX
